@@ -30,7 +30,7 @@ class HomeProvider with ChangeNotifier {
   Set<Circle> circles = Set.from([]);
 
   BottomDrawerMenuState bottomDrawerMenuState = BottomDrawerMenuState.VIEW;
-  BottomDrawerEditMenuState bottomDrawerEditMenuState =
+  BottomDrawerEditMenuState _bottomDrawerEditMenuState =
       BottomDrawerEditMenuState.PIN;
 
   init() async {
@@ -41,6 +41,12 @@ class HomeProvider with ChangeNotifier {
       _calculateDistance();
       _updateCircle();
     });
+  }
+
+  get bottomDrawerEditMenuState => _bottomDrawerEditMenuState;
+  set bottomDrawerEditMenuState(state) {
+    _bottomDrawerEditMenuState = state;
+    notifyListeners();
   }
 
   _calculateDistance() {
@@ -62,11 +68,13 @@ class HomeProvider with ChangeNotifier {
     monitorlatitude = 0;
     monitorlongitude = 0;
     monitorRadius = 0;
+    _updateCircle();
   }
 
   editArea() {
     bottomDrawerMenuState = BottomDrawerMenuState.EDIT;
     _backupMonitorArea();
+    notifyListeners();
   }
 
   updateMonitorLocation(LatLng latLng) {
@@ -79,6 +87,7 @@ class HomeProvider with ChangeNotifier {
       }
       bottomDrawerEditMenuState = BottomDrawerEditMenuState.RADIUS;
       _updateCircle();
+      notifyListeners();
     }
   }
 
@@ -102,6 +111,7 @@ class HomeProvider with ChangeNotifier {
   saveMonitorArea() {
     bottomDrawerMenuState = BottomDrawerMenuState.VIEW;
     bottomDrawerEditMenuState = BottomDrawerEditMenuState.PIN;
+    notifyListeners();
   }
 
   restoreMonitorArea() {
@@ -109,6 +119,7 @@ class HomeProvider with ChangeNotifier {
     monitorlatitude = monitorlatitudeBak;
     monitorlongitude = monitorlongitudeBak;
     monitorRadius = monitorRadiusBak;
+    notifyListeners();
   }
 
   _updateCircle() {
