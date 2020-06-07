@@ -13,7 +13,8 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: Stack(
         alignment: AlignmentDirectional.bottomCenter,
-        children: <Widget>[MapWidget(), BottomDrawer()],
+        // children: <Widget>[],
+        children: <Widget>[MapWidget()],
       ),
     );
   }
