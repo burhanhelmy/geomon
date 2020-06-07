@@ -14,7 +14,7 @@ class MapWidgetState extends State<MapWidget> {
   int focusCurrentLocation;
 
   static final CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(3.1510, 101.5982),
+    target: LatLng(3.1592907, 101.7540397),
     zoom: 19,
   );
 
