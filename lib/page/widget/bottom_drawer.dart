@@ -30,38 +30,69 @@ class _BottomDrawerState extends State<BottomDrawer> {
     }
 
     _mainMenu() {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      return Column(
         children: <Widget>[
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Row(children: [
-                Icon(
-                  Icons.rss_feed,
-                  size: 15,
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Row(children: [
+                      Icon(
+                        Icons.rss_feed,
+                        size: 15,
+                      ),
+                      Text(
+                        'Status',
+                      )
+                    ]),
+                    Row(children: [
+                      _colorIndicator(),
+                      Text('INSIDE', style: textTheme.headline5)
+                    ]),
+                  ],
+                ),
+                RaisedButton(
+                  textColor: Colors.white,
+                  color: theme.primaryColor,
+                  onPressed: () {
+                    setState(() {
+                      widget.menuState = BottomDrawerMenuState.EDIT;
+                    });
+                  },
+                  child: Text('EDIT AREA'),
+                )
+              ],
+            ),
+          ),
+          Divider(),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  'GEOM',
+                  style: TextStyle(
+                      color: Colors.grey, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  'Status',
-                )
-              ]),
-              Row(children: [
-                _colorIndicator(),
-                Text('INSIDE', style: textTheme.headline5)
-              ]),
-            ],
+                  'O',
+                  style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  'N',
+                  style: TextStyle(
+                      color: Colors.grey, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
           ),
-          RaisedButton(
-            textColor: Colors.white,
-            color: theme.primaryColor,
-            onPressed: () {
-              setState(() {
-                widget.menuState = BottomDrawerMenuState.EDIT;
-              });
-            },
-            child: Text('EDIT AREA'),
-          )
         ],
       );
     }
@@ -151,7 +182,7 @@ class _BottomDrawerState extends State<BottomDrawer> {
       children: <Widget>[
         Padding(padding: const EdgeInsets.all(8.0), child: _topWidget()),
         Container(
-          padding: EdgeInsets.all(20),
+          padding: EdgeInsets.only(left: 20, right: 20, top: 20),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20), topRight: Radius.circular(20)),
@@ -164,7 +195,7 @@ class _BottomDrawerState extends State<BottomDrawer> {
                   offset: Offset(0, 3), // changes position of shadow
                 ),
               ]),
-          height: MediaQuery.of(context).size.height / 4,
+          height: MediaQuery.of(context).size.height / 3.5,
           child: widget.menuState == BottomDrawerMenuState.VIEW
               ? _mainMenu()
               : _editMenu(),
