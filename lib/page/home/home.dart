@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:geomon/page/widget/bottom_drawer.dart';
-import 'package:geomon/page/widget/map.dart';
+import 'package:geomon/page/home/widget/bottom_drawer.dart';
+import 'package:geomon/page/home/widget/map.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -14,7 +14,7 @@ class _HomePageState extends State<HomePage> {
       body: Stack(
         alignment: AlignmentDirectional.bottomCenter,
         // children: <Widget>[],
-        children: <Widget>[MapWidget()],
+        children: <Widget>[MapWidget(), BottomDrawer()],
       ),
     );
   }
