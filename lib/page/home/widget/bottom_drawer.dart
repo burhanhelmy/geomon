@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:geomon/page/widget/edit_menu_btn.dart';
-import 'package:geomon/page/widget/radius_slider.dart';
-
-enum BottomDrawerMenuState { VIEW, EDIT }
-enum BottomDrawerEditMenuState { PIN, RADIUS }
+import 'package:geomon/page/home/provider/home_provider.dart';
+import 'package:geomon/page/home/widget/edit_menu_btn.dart';
+import 'package:geomon/page/home/widget/radius_slider.dart';
+import 'package:provider/provider.dart';
 
 class BottomDrawer extends StatefulWidget {
-  BottomDrawerMenuState menuState = BottomDrawerMenuState.VIEW;
-  BottomDrawerEditMenuState editMenuState = BottomDrawerEditMenuState.PIN;
   @override
   _BottomDrawerState createState() => _BottomDrawerState();
 }
@@ -17,14 +14,29 @@ class _BottomDrawerState extends State<BottomDrawer> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final theme = Theme.of(context);
+    final homeProvider = Provider.of<HomeProvider>(context);
 
     _colorIndicator() {
+      var indicatorColor;
+
+      switch (homeProvider.status) {
+        case GeofenceLocationStatus.inside:
+          indicatorColor = Colors.green;
+          break;
+        case GeofenceLocationStatus.outside:
+          indicatorColor = Colors.orange;
+          break;
+        default:
+          indicatorColor = Colors.grey;
+      }
+
       return Padding(
         padding: const EdgeInsets.all(4.0),
-        child: Container(
-          height: 20,
+        child: AnimatedContainer(
+          height: 18,
           width: 5,
-          color: Colors.green,
+          color: indicatorColor,
+          duration: Duration(seconds: 2),
         ),
       );
     }
@@ -51,7 +63,7 @@ class _BottomDrawerState extends State<BottomDrawer> {
                     ]),
                     Row(children: [
                       _colorIndicator(),
-                      Text('INSIDE', style: textTheme.headline5)
+                      Text(homeProvider.status, style: textTheme.headline5)
                     ]),
                   ],
                 ),
@@ -59,9 +71,7 @@ class _BottomDrawerState extends State<BottomDrawer> {
                   textColor: Colors.white,
                   color: theme.primaryColor,
                   onPressed: () {
-                    setState(() {
-                      widget.menuState = BottomDrawerMenuState.EDIT;
-                    });
+                    homeProvider.editArea();
                   },
                   child: Text('EDIT AREA'),
                 )
@@ -108,21 +118,30 @@ class _BottomDrawerState extends State<BottomDrawer> {
               children: <Widget>[
                 Column(
                   children: <Widget>[
+                    EditMenuBtn(Icons.delete_outline, 'Clear Area', () {
+                      homeProvider.clearMonitorArea();
+                    },
+                        homeProvider.bottomDrawerEditMenuState ==
+                            BottomDrawerEditMenuState.DELETE),
+                  ],
+                ),
+                Column(
+                  children: <Widget>[
                     EditMenuBtn(Icons.location_on, 'Pin Location', () {
-                      setState(() {
-                        widget.editMenuState = BottomDrawerEditMenuState.PIN;
-                      });
-                    }, widget.editMenuState == BottomDrawerEditMenuState.PIN),
+                      homeProvider.bottomDrawerEditMenuState =
+                          BottomDrawerEditMenuState.PIN;
+                    },
+                        homeProvider.bottomDrawerEditMenuState ==
+                            BottomDrawerEditMenuState.PIN),
                   ],
                 ),
                 Column(
                   children: <Widget>[
                     EditMenuBtn(Icons.zoom_out_map, 'Set Radius', () {
-                      setState(() {
-                        widget.editMenuState = BottomDrawerEditMenuState.RADIUS;
-                      });
+                      homeProvider.bottomDrawerEditMenuState =
+                          BottomDrawerEditMenuState.RADIUS;
                     },
-                        widget.editMenuState ==
+                        homeProvider.bottomDrawerEditMenuState ==
                             BottomDrawerEditMenuState.RADIUS),
                   ],
                 )
@@ -134,16 +153,16 @@ class _BottomDrawerState extends State<BottomDrawer> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               FlatButton(
-                onPressed: () {},
+                onPressed: () {
+                  homeProvider.saveMonitorArea();
+                },
                 child: Text(
                   'Save',
                 ),
               ),
               FlatButton(
                 onPressed: () {
-                  setState(() {
-                    widget.menuState = BottomDrawerMenuState.VIEW;
-                  });
+                  homeProvider.restoreMonitorArea();
                 },
                 child: Text(
                   'Cancel',
@@ -163,14 +182,17 @@ class _BottomDrawerState extends State<BottomDrawer> {
             Icons.gps_fixed,
             color: Colors.black,
           ),
-          onPressed: () {});
+          onPressed: () {
+            homeProvider.onfocusCurrentLocation();
+          });
     }
 
     _topWidget() {
-      if (widget.menuState == BottomDrawerMenuState.VIEW) {
+      if (homeProvider.bottomDrawerMenuState == BottomDrawerMenuState.VIEW) {
         return _getCurrentLocationFab();
       }
-      if (widget.editMenuState == BottomDrawerEditMenuState.RADIUS) {
+      if (homeProvider.bottomDrawerEditMenuState ==
+          BottomDrawerEditMenuState.RADIUS) {
         return RadiusSlider();
       } else {}
       return Container();
@@ -196,9 +218,10 @@ class _BottomDrawerState extends State<BottomDrawer> {
                 ),
               ]),
           height: MediaQuery.of(context).size.height / 3.5,
-          child: widget.menuState == BottomDrawerMenuState.VIEW
-              ? _mainMenu()
-              : _editMenu(),
+          child:
+              homeProvider.bottomDrawerMenuState == BottomDrawerMenuState.VIEW
+                  ? _mainMenu()
+                  : _editMenu(),
         ),
       ],
     );

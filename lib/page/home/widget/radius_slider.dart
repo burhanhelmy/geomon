@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:geomon/page/home/provider/home_provider.dart';
+import 'package:provider/provider.dart';
 
 class RadiusSlider extends StatefulWidget {
   double value = 0;
@@ -9,12 +11,13 @@ class RadiusSlider extends StatefulWidget {
 class _RadiusSliderState extends State<RadiusSlider> {
   @override
   Widget build(BuildContext context) {
+    final homeProvider = Provider.of<HomeProvider>(context);
     _radiusText() {
       return Container(
           width: 80,
           padding: EdgeInsets.only(right: 8.0),
           child: Text(
-            '${(widget.value * 100).roundToDouble()} KM',
+            '${homeProvider.monitorRadius.toStringAsFixed(2)} m',
             textAlign: TextAlign.center,
           ));
     }
@@ -28,11 +31,10 @@ class _RadiusSliderState extends State<RadiusSlider> {
           children: <Widget>[
             Expanded(
               child: Slider(
-                value: widget.value,
+                value: (homeProvider.monitorRadius /
+                    homeProvider.maxMonitorRadius),
                 onChanged: (double value) {
-                  setState(() {
-                    widget.value = value;
-                  });
+                  homeProvider.updateMonitorRadius(value);
                 },
               ),
             ),
