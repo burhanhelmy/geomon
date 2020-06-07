@@ -3,7 +3,7 @@
 Geomon is a geofencing app powerd by flutter
 
 
-![alt text](https://imgur.com/a/bcWJUju)
+![demo gif](https://imgur.com/a/bcWJUju)
 
 ##### Known Limitation
 
