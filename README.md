@@ -1,6 +1,6 @@
 # GEOMON
 
-Geomon is a geofencing app powerd by flutter
+Geomon is a geofencing app powered by flutter
 
 
 ![demo gif](https://i.imgur.com/YqgUPh6.gif)
@@ -9,23 +9,23 @@ Geomon is a geofencing app powerd by flutter
 
 ##### Known Limitation
 
-  - Onlty support for foreground geofencing
-  - Using non platform specific api for geofencing
-  - Single geofence area
+  - Only support for foreground geofencing.
+  - Using non platform specific api for geofencing.
+  - Single geofence area.
  
 ##### Features
 
-  - Google map
-  - Current location indicator
-  - Adding , resize and remove geofence area
-  - Focusing map view on current location 
-  - Inside and outsize geofence area indicator  
+  - Google map.
+  - Current location indicator.
+  - Adding , resize and remove geofence area.
+  - Focusing map view on current location.
+  - Inside and outsize geofence area indicator.  
   
 
 
 ##### Getting Started
 
-  Dillinger requires [Flutter](https://flutter.dev/docs/get-started/install) to run
+  Geomon requires [Flutter](https://flutter.dev/docs/get-started/install) to run.
   Install the dependencies and start the app.
   ```sh
 $ flutter run
@@ -45,5 +45,5 @@ Geomon is currently implemented with the following plugins.
 | provider |
 
 ##### TODO
-- Use platform specific api for geofencing for accurate and best peformance
+- Use platform specific api for accurate and best peformance on the geofencing.
 
